@@ -189,7 +189,15 @@ main.wrap { padding-block: 32px 64px; display: flex; flex-direction: column; gap
 .share { display: flex; flex-direction: column; gap: 14px; }
 .share-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
 .share-label { flex: 0 0 140px; font-weight: 600; }
-.share-bar { flex: 1 1 420px; min-width: 0; display: flex; gap: 2px; height: 44px; }
+.share-bar { flex: 1 1 420px; min-width: 0; display: flex; gap: 2px; height: 44px; container-type: inline-size; }
+/* When the bar itself is narrow, segments show only the percentage; the legend below names the colors */
+@container (max-width: 760px) {
+  .share-bar .share-seg { justify-content: center; padding: 0 4px; }
+  .share-seg .sname { display: none; }
+}
+@container (max-width: 360px) {
+  .share-bar .share-seg { padding: 0 1px; font-size: 12px; }
+}
 .share-seg { display: flex; align-items: center; padding: 0 12px; font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; min-width: 0; }
 .share-seg:first-child { border-radius: 4px 0 0 4px; }
 .share-seg:last-child { border-radius: 0 4px 4px 0; }
@@ -266,7 +274,7 @@ table { border-collapse: collapse; width: 100%; }
 .daystats div { display: flex; flex-direction: column; }
 .daystats b { font-size: 18px; }
 .chartbox { overflow-x: auto; }
-.chart { min-width: 560px; display: grid; grid-template-columns: 52px 1fr; }
+.chart { min-width: 460px; display: grid; grid-template-columns: 52px 1fr; }
 .yaxis { position: relative; height: 200px; }
 .yaxis span { position: absolute; right: 8px; transform: translateY(50%); font-size: 11px; color: var(--muted); }
 .plot { position: relative; height: 200px; border-bottom: 1px solid var(--muted); }
@@ -334,7 +342,6 @@ footer.foot .warn { color: var(--accent-text); }
 
 .mbar .fill { width: calc((100% - 190px) * var(--w)); }
 .cal .day .vs { display: none; }
-.share-legend { display: none; }
 .scopebar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 16px calc(8px + env(safe-area-inset-bottom, 0px)); background: var(--surface); border-top: 1px solid var(--line); box-shadow: 0 -4px 16px rgb(15 27 45 / .08); font-size: 14px; color: var(--muted); }
 .scopebar strong { color: var(--ink); font-weight: 600; }
 .scopebar .seg { flex: none; }
@@ -386,13 +393,10 @@ footer.foot .warn { color: var(--accent-text); }
   .say { font-size: 19px; }
 
   .share-label { flex-basis: 100%; }
-  .share-seg { justify-content: center; padding: 0 4px; }
-  .share-seg .sname { display: none; }
-  .share-legend { display: flex; }
 
   .htable { min-width: 0; width: 100%; border-spacing: 3px; }
   .htable th { font-size: 12px; white-space: normal; line-height: 1.3; }
-  .htable th[scope="row"] { font-size: 13px; }
+  .htable th[scope="row"] { font-size: 13px; white-space: normal; }
   .htable td { padding: 8px 2px; font-size: 13px; }
 
   .chartbox, .scroll-hint { display: none; }
@@ -406,8 +410,19 @@ footer.foot .warn { color: var(--accent-text); }
   .cal .day .v { font-size: 12px; }
   .cal .day .vf { display: none; }
   .cal .day .vs { display: inline; }
+}
 
-  /* Branch table becomes one card per branch */
+/* Very small phones (iPhone SE class): tighten the product x branch table so it fits without sideways scroll */
+@media (max-width: 360px) {
+  .duo .panel { padding: 10px; }
+  .htable { border-spacing: 2px; }
+  .htable th { font-size: 11px; }
+  .htable th[scope="row"] { font-size: 12px; }
+  .htable td { padding: 8px 1px; font-size: 12px; }
+}
+
+/* Phones and tablets: the 9-column branch table becomes one card per branch */
+@media (max-width: 1080px) {
   .tablebox { background: transparent; overflow-x: visible; border-radius: 0; }
   .btable { min-width: 0; }
   .btable thead { display: none; }
